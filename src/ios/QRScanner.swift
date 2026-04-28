@@ -3,10 +3,10 @@ import AVFoundation
 
 @objc(QRScanner)
 class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
-    
+
     class CameraView: UIView {
         var videoPreviewLayer:AVCaptureVideoPreviewLayer?
-        
+
         func interfaceOrientationToVideoOrientation(_ orientation : UIInterfaceOrientation) -> AVCaptureVideoOrientation {
             switch (orientation) {
             case UIInterfaceOrientation.portrait:
@@ -29,18 +29,18 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
                     layer.frame = self.bounds;
                 }
             }
-            
+
             self.videoPreviewLayer?.connection?.videoOrientation = interfaceOrientationToVideoOrientation(UIApplication.shared.statusBarOrientation);
         }
-        
-        
+
+
         func addPreviewLayer(_ previewLayer:AVCaptureVideoPreviewLayer?) {
             previewLayer!.videoGravity = AVLayerVideoGravity.resizeAspectFill
             previewLayer!.frame = self.bounds
             self.layer.addSublayer(previewLayer!)
             self.videoPreviewLayer = previewLayer;
         }
-        
+
         func removePreviewLayer() {
             if self.videoPreviewLayer != nil {
                 self.videoPreviewLayer!.removeFromSuperlayer()
@@ -240,8 +240,8 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         let found = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
         if found.type == AVMetadataObject.ObjectType.qr && found.stringValue != nil {
             scanning = false
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue)
-            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand?.callbackId!)
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue!)
+            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand!.callbackId)
             nextScanningCommand = nil
         }
     }
@@ -489,3 +489,4 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 }
+ 
